@@ -36,8 +36,8 @@ st.markdown("---")
 # =============================================
 # CONFIGURE YOUR FILE PATHS HERE
 # =============================================
-MODEL_PATH = "C:\\Users\\krish\\OneDrive\\Desktop\\medical_no_show\\no_show_medical.pkl" 
-DATA_PATH = "C:\\Users\\krish\\OneDrive\Desktop\\medical_no_show\\medical_final.csv"
+MODEL_PATH = "no_show_medical.pkl" 
+DATA_PATH = "medical_final.csv"
 
 # Load model automatically
 @st.cache_resource
@@ -579,3 +579,4 @@ GradientBoostingClassifier(
         title="Model Performance Radar Chart", height=600
     )
     st.plotly_chart(fig_radar, use_container_width=True)
+
