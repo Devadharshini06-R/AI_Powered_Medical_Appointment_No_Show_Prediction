@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -39,56 +33,55 @@ st.markdown("""
 st.markdown('<h1 class="main-header">🏥 AI-Powered No-Show Prediction System</h1>', unsafe_allow_html=True)
 st.markdown("---")
 
-# Sidebar file uploads
-st.sidebar.title("📁 Upload Files")
-model_file = st.sidebar.file_uploader("Upload trained model (.pkl)", type=["pkl"])
-data_file = st.sidebar.file_uploader("Upload data (.csv)", type=["csv"])
+# =============================================
+# CONFIGURE YOUR FILE PATHS HERE
+# =============================================
+MODEL_PATH = "C:\\Users\\krish\\OneDrive\\Desktop\\medical_no_show\\no_show_medical.pkl" 
+DATA_PATH = "C:\\Users\\krish\\OneDrive\Desktop\\medical_no_show\\medical_final.csv"
 
-if not model_file:
-    st.warning("⚠️ Please upload a trained model (.pkl) file to continue.")
-    st.stop()
-
-# Load model - FIXED VERSION
+# Load model automatically
 @st.cache_resource
-def load_model(file_uploader):
+def load_model(path):
     try:
-        return pickle.load(file_uploader)
+        with open(path, 'rb') as f:
+            return pickle.load(f)
+    except FileNotFoundError:
+        st.error(f"❌ Model file not found: {path}")
+        st.info("💡 Please update MODEL_PATH variable in the code with correct path")
+        st.stop()
     except Exception as e:
-        st.error(f"Error in load_model: {str(e)}")
-        raise
+        st.error(f"❌ Error loading model: {e}")
+        st.exception(e)
+        st.stop()
 
-# Load data - FIXED VERSION
+# Load data automatically
 @st.cache_data
-def load_data(file_uploader):
+def load_data(path):
     try:
-        return pd.read_csv(file_uploader)
+        return pd.read_csv(path)
+    except FileNotFoundError:
+        st.warning(f"⚠️ Data file not found: {path}")
+        return None
     except Exception as e:
-        st.error(f"Error in load_data: {str(e)}")
-        raise
+        st.warning(f"⚠️ Error loading CSV: {e}")
+        return None
 
 # Load the model
-try:
-    model = load_model(model_file)
-    st.sidebar.success("✅ Model loaded successfully!")
-except Exception as e:
-    st.sidebar.error(f"❌ Error loading model: {e}")
-    st.stop()
+model = load_model(MODEL_PATH)
+st.sidebar.success(f"✅ Model loaded: {MODEL_PATH}")
 
-# Load CSV data if provided
-df = None
-if data_file:
-    try:
-        df = load_data(data_file)
-        st.sidebar.success(f"✅ Data loaded: {len(df)} records")
-        
-        # Debug: Show first few rows and columns
-        with st.sidebar.expander("📋 Data Preview"):
-            st.write("Columns:", df.columns.tolist())
-            st.write("Shape:", df.shape)
-            st.dataframe(df.head())
-    except Exception as e:
-        st.sidebar.error(f"❌ Error loading CSV: {e}")
-        st.exception(e)
+# Load CSV data if available
+df = load_data(DATA_PATH)
+if df is not None:
+    st.sidebar.success(f"✅ Data loaded: {len(df)} records from {DATA_PATH}")
+    
+    # Debug: Show first few rows and columns
+    with st.sidebar.expander("📋 Data Preview"):
+        st.write("Columns:", df.columns.tolist())
+        st.write("Shape:", df.shape)
+        st.dataframe(df.head())
+else:
+    st.sidebar.info("ℹ️ No data file loaded (Dashboard will show default metrics)")
 
 # Extract unique cities from data
 unique_cities = ["Other"]
