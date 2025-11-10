@@ -3,6 +3,8 @@
 
 The project leverages Machine Learning and Streamlit to predict whether or not patients will show up for their medical appointments. It aims to reduce no-shows, optimize scheduling, and improve patient engagement for healthcare providers.
 
+streamlit app : [link](https://medicalnoshowpy-7favft8ejlknxrnebvheqk.streamlit.app/)
+
 ---
 ## 🚀 Important Features
 
