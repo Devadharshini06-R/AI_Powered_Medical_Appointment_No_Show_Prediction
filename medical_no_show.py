@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -41,18 +48,25 @@ if not model_file:
     st.warning("⚠️ Please upload a trained model (.pkl) file to continue.")
     st.stop()
 
-# Load model
+# Load model - FIXED VERSION
 @st.cache_resource
-def load_model(f):
-    f.seek(0)
-    return pickle.load(f)
+def load_model(file_uploader):
+    try:
+        return pickle.load(file_uploader)
+    except Exception as e:
+        st.error(f"Error in load_model: {str(e)}")
+        raise
 
-# Load data
+# Load data - FIXED VERSION
 @st.cache_data
-def load_data(f):
-    f.seek(0)
-    return pd.read_csv(f)
+def load_data(file_uploader):
+    try:
+        return pd.read_csv(file_uploader)
+    except Exception as e:
+        st.error(f"Error in load_data: {str(e)}")
+        raise
 
+# Load the model
 try:
     model = load_model(model_file)
     st.sidebar.success("✅ Model loaded successfully!")
@@ -66,8 +80,15 @@ if data_file:
     try:
         df = load_data(data_file)
         st.sidebar.success(f"✅ Data loaded: {len(df)} records")
+        
+        # Debug: Show first few rows and columns
+        with st.sidebar.expander("📋 Data Preview"):
+            st.write("Columns:", df.columns.tolist())
+            st.write("Shape:", df.shape)
+            st.dataframe(df.head())
     except Exception as e:
         st.sidebar.error(f"❌ Error loading CSV: {e}")
+        st.exception(e)
 
 # Extract unique cities from data
 unique_cities = ["Other"]
