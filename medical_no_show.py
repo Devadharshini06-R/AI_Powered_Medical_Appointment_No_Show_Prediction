@@ -245,17 +245,16 @@ if page == "🔮 Live Prediction":
                 col_a, col_b, col_c = st.columns(3)
                 
                 with col_a:
-                    st.markdown('<div class="metric-card">', unsafe_allow_html=True)
                     st.metric("🎯 Prediction", "No-Show ❌" if pred else "Will Show ✅")
                     st.markdown('</div>', unsafe_allow_html=True)
                 
                 with col_b:
-                    st.markdown('<div class="metric-card">', unsafe_allow_html=True)
+                   
                     st.metric("⚠️ Risk Level", risk)
                     st.markdown('</div>', unsafe_allow_html=True)
                 
                 with col_c:
-                    st.markdown('<div class="metric-card">', unsafe_allow_html=True)
+                   
                     st.metric("📈 No-Show Probability", f"{prob:.1%}")
                     st.markdown('</div>', unsafe_allow_html=True)
                 
@@ -295,5 +294,6 @@ if page == "🔮 Live Prediction":
             except Exception as e:
                 st.error(f"❌ Error during prediction: {str(e)}")
                 st.exception(e)
+
 
 
