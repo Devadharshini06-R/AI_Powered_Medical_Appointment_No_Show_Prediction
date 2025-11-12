@@ -5,6 +5,8 @@ The project leverages Machine Learning and Streamlit to predict whether or not p
 
 streamlit app : [link](https://medicalnoshowpy-7favft8ejlknxrnebvheqk.streamlit.app/)
 
+Streamlit Dashboard : [link](https://dashboardpy-7.streamlit.app/)
+
 ---
 ## 🚀 Important Features
 
